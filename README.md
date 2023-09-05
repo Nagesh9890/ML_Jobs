@@ -184,4 +184,50 @@ final_df = final_df.select("account_holder_name", "account_ifsc", "account_type"
 # Display the result
 final_df.show()
 
+-------------------------
+
+from pyspark.sql import functions as F
+
+def compute_aggregates(df, category_col, amount_col):
+    # Get unique categories
+    unique_categories = df.select(category_col).distinct().rdd.flatMap(lambda x: x).collect()
+
+    agg_dfs = []
+    for category in unique_categories:
+        # Filter the DataFrame for rows based on category
+        filtered_df = df.filter(df[category_col] == category)
+
+        # Group by account_number and compute the count and sum
+        agg_df = filtered_df.groupBy("account_number").agg(
+            F.count(category_col).alias(f"count_{category}"),
+            F.sum(amount_col).alias(f"sum_{category}")
+        )
+        agg_dfs.append(agg_df)
+
+    # Reduce by joining all aggregated DataFrames
+    final_agg_df = agg_dfs[0]
+    for agg_df in agg_dfs[1:]:
+        final_agg_df = final_agg_df.join(agg_df, ["account_number"], "outer").fillna(0)
+
+    return final_agg_df
+
+# Compute aggregates for category_level1 and category_level2
+agg_df1 = compute_aggregates(result_df, "category_level1", "payer_amount")
+agg_df2 = compute_aggregates(result_df, "category_level2", "payer_amount")
+
+# Join the two aggregated DataFrames
+final_agg_df = agg_df1.join(agg_df2, ["account_number"], "outer").fillna(0)
+
+# Create a DataFrame with unique account_holder_name, account_ifsc, and account_type for each account_number
+unique_account_details = result_df.select("account_number", "account_holder_name", "account_ifsc", "account_type").distinct()
+
+# Join the final_agg_df with unique_account_details on account_number
+final_df = final_agg_df.join(unique_account_details, ["account_number"], "left")
+
+# Reorder the columns to place account details first
+cols = ["account_holder_name", "account_ifsc", "account_type", "account_number"] + [col for col in final_df.columns if col not in ["account_holder_name", "account_ifsc", "account_type", "account_number"]]
+final_df = final_df.select(*cols)
+
+# Display the result
+final_df.show()
 
