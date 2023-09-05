@@ -240,3 +240,10 @@ spark = SparkSession.builder \
 
 -------------
 spark = SparkSession.builder.getOrCreate()
+
+--------------
+
+df = spark.read.json(sc.parallelize([jdf]))
+df.show(truncate=False)
+
+
