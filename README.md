@@ -230,4 +230,10 @@ final_df = final_df.select(*cols)
 
 # Display the result
 final_df.show()
+---------------
 
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("YourAppName") \
+    .getOrCreate()
