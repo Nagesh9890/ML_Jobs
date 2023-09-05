@@ -246,4 +246,9 @@ spark = SparkSession.builder.getOrCreate()
 df = spark.read.json(sc.parallelize([jdf]))
 df.show(truncate=False)
 
+-----
 
+File "<ipython-input-15-1eed0b1156eb>", line 12
+    F.count(category_col).alias(f"count_{category}"),
+                                                  ^
+SyntaxError: invalid syntax
