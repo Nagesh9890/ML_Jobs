@@ -1,3 +1,14 @@
+Nicholas Renotte- 
+IBM Watson Studio Machine Learning- https://www.youtube.com/watch?v=wH3VPyb-LCE&list=PLgNJO2hghbmg2WNd3XRd1WqXgkj-xsN5D
+Watson TTS - https://www.youtube.com/watch?v=8k8S5ruFAUs&list=PLgNJO2hghbmjJv0tSpfiDGQhdLgKb-ZmU
+IBM Watson Discovery - https://www.youtube.com/watch?v=py8QwrIUynE&list=PLgNJO2hghbmjbWnVxvG4sLWR0sgLPMnmh
+Watson Assistant - https://www.youtube.com/watch?v=CeId265HGnM&list=PLgNJO2hghbmiACV9v_sdBwRLnEdKUlZ1s
+Watson Personality Inwsights - https://www.youtube.com/watch?v=3xukwXLDbbE&list=PLgNJO2hghbmj4N9wL2BC0YLjz1V7fmoao
+DWBIADDA VIDEOS-https://www.youtube.com/watch?v=fPu8MRV-RBI&list=PL3GCZkoyKK4ewLKHuxb8gJNH1h30IHiic
+
+
+
+
 AutoAI Experiment
 Connections
 Data Assets
