@@ -1,4 +1,5 @@
 Nicholas Renotte- 
+Auto AI -https://www.youtube.com/watch?v=pCuV_7H2vyQ&list=PLgNJO2hghbmjS9lWx85ABVHWFCWh5s-SX
 IBM Watson Studio Machine Learning- https://www.youtube.com/watch?v=wH3VPyb-LCE&list=PLgNJO2hghbmg2WNd3XRd1WqXgkj-xsN5D
 Watson TTS - https://www.youtube.com/watch?v=8k8S5ruFAUs&list=PLgNJO2hghbmjJv0tSpfiDGQhdLgKb-ZmU
 IBM Watson Discovery - https://www.youtube.com/watch?v=py8QwrIUynE&list=PLgNJO2hghbmjbWnVxvG4sLWR0sgLPMnmh
