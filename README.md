@@ -837,4 +837,74 @@ final_df = unique_account_details.join(final_agg_df, ["account_number"], "left")
 # Display the result
 final_df.show()
 
+-------------------------------------
 
+
+# Phonepe ML Model 
+#Importing Libraries
+import numpy as np
+import pandas as pd
+from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+
+df = pd.read_excel("PhonePe_Sherloc_Categories.xlsx")  # Replace with the path to your dataset
+df.columns
+df2 = df[['payer_name','payer_vpa','payee_account_type','payee_name','payee_vpa','payer_account_type', 'Category1','Category2']]
+
+def custom_tokenizer(text):
+    # split the text and value using regular expression
+    import re
+    pattern = re.compile(r'[a-zA-Z]+\d+')
+    text_and_value = pattern.findall(text)
+    return text_and_value
+# Apply TF-Vectorization on data
+tfidf_payer_name = TfidfVectorizer()
+tfidf_matrix_payer_name = tfidf_payer_name.fit_transform(df2['payer_name'].astype(str))
+
+tfidf_payee_name = TfidfVectorizer()
+tfidf_matrix_payee_name = tfidf_payee_name.fit_transform(df2['payee_name'].astype(str))
+
+tfidf_payee_account_type = TfidfVectorizer()
+tfidf_matrix_payee_account_type = tfidf_payee_account_type.fit_transform(df2['payee_account_type'].astype(str))
+
+tfidf_payer_account_type = TfidfVectorizer()
+tfidf_matrix_payer_account_type = tfidf_payer_account_type.fit_transform(df2['payer_account_type'].astype(str))
+
+tfidf_payer_vpa = TfidfVectorizer(tokenizer=custom_tokenizer)
+df2['payer_vpa'] = df2['payer_vpa'].astype(str)
+tfidf_matrix_payer_vpa = tfidf_payer_vpa.fit_transform(df2['payer_vpa'])
+
+tfidf_payee_vpa = TfidfVectorizer(tokenizer=custom_tokenizer)
+df2['payee_vpa'] = df2['payee_vpa'].astype(str)
+tfidf_matrix_payee_vpa = tfidf_payee_vpa.fit_transform(df2['payee_vpa'])
+
+
+tfidf_matrix = pd.concat([pd.DataFrame(tfidf_matrix_payer_name.toarray()),
+                          pd.DataFrame(tfidf_matrix_payee_name.toarray()),
+                          pd.DataFrame(tfidf_matrix_payee_account_type.toarray()),
+                          pd.DataFrame(tfidf_matrix_payer_account_type.toarray()),
+                          pd.DataFrame(tfidf_matrix_payer_vpa.toarray()),
+                          pd.DataFrame(tfidf_matrix_payee_vpa.toarray())], axis=1)
+X_train, X_test, y_cat1_train, y_cat1_test, y_cat2_train, y_cat2_test = train_test_split(tfidf_matrix, df2['Category1'], df2['Category2'], test_size=0.2, random_state=42)
+clf_cat1 = RandomForestClassifier()
+
+clf_cat1.fit(X_train, y_cat1_train)
+
+clf_cat2 = RandomForestClassifier()
+clf_cat2.fit(X_train, y_cat2_train) # Make predictions for each target variable
+
+predictions_cat1 = clf_cat1.predict(X_test)
+predictions_cat2 = clf_cat2.predict(X_test)
+
+accuracy_cat1 = accuracy_score(y_cat1_test, predictions_cat1)
+print(f"Accuracy for Category Level 1: {accuracy_cat1:.2f}")
+
+# Calculate accuracy for Category Level 2 predictions
+accuracy_cat2 = accuracy_score(y_cat2_test, predictions_cat2)
+print(f"Accuracy for Category Level 2: {accuracy_cat2:.2f}")
+
+df2.head(2)
