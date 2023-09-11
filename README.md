@@ -6,7 +6,22 @@ IBM Watson Discovery - https://www.youtube.com/watch?v=py8QwrIUynE&list=PLgNJO2h
 Watson Assistant - https://www.youtube.com/watch?v=CeId265HGnM&list=PLgNJO2hghbmiACV9v_sdBwRLnEdKUlZ1s
 Watson Personality Inwsights - https://www.youtube.com/watch?v=3xukwXLDbbE&list=PLgNJO2hghbmj4N9wL2BC0YLjz1V7fmoao
 DWBIADDA VIDEOS-https://www.youtube.com/watch?v=fPu8MRV-RBI&list=PL3GCZkoyKK4ewLKHuxb8gJNH1h30IHiic
+--------------
 
+ValueErrorTraceback (most recent call last)
+<ipython-input-1-b6f127fe6f4d> in <module>()
+     69 clf.fit(X_train, y_train)
+     70 
+---> 71 predictions = clf.predict(X_test)
+
+/opt/anaconda/anaconda2/lib/python2.7/site-packages/sklearn/ensemble/forest.pyc in predict(self, X)
+    508                 predictions[:, k] = self.classes_[k].take(np.argmax(proba[k],
+    509                                                                     axis=1),
+--> 510                                                           axis=0)
+    511 
+    512             return predictions
+
+ValueError: could not convert string to float: Medium Value Customers
 
 
 
