@@ -7,23 +7,92 @@ Watson Assistant - https://www.youtube.com/watch?v=CeId265HGnM&list=PLgNJO2hghbm
 Watson Personality Inwsights - https://www.youtube.com/watch?v=3xukwXLDbbE&list=PLgNJO2hghbmj4N9wL2BC0YLjz1V7fmoao
 DWBIADDA VIDEOS-https://www.youtube.com/watch?v=fPu8MRV-RBI&list=PL3GCZkoyKK4ewLKHuxb8gJNH1h30IHiic
 --------------
+# Phonepe ML Model 
+# Importing Libraries
+import numpy as np
+import pandas as pd
+from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
 
-ValueErrorTraceback (most recent call last)
-<ipython-input-1-b6f127fe6f4d> in <module>()
-     69 clf.fit(X_train, y_train)
-     70 
----> 71 predictions = clf.predict(X_test)
+df = pd.read_excel("/content/Cust_segmentation_and_Recomendation_with_Recommendations.xlsx")  # Replace with the path to your dataset
 
-/opt/anaconda/anaconda2/lib/python2.7/site-packages/sklearn/ensemble/forest.pyc in predict(self, X)
-    508                 predictions[:, k] = self.classes_[k].take(np.argmax(proba[k],
-    509                                                                     axis=1),
---> 510                                                           axis=0)
-    511 
-    512             return predictions
+# Convert columns to object data type
+df['Bill Payment'] = df['Bill Payment'].astype(object)
+df['Dining '] = df['Dining '].astype(object)
+df['Loan'] = df['Loan'].astype(object)
+df['Travel & hospitality '] = df['Travel & hospitality '].astype(object)
+df['Vehicle Running Expenses'] = df['Vehicle Running Expenses'].astype(object)
+df['Credit Card Payement '] = df['Credit Card Payement '].astype(object)
+df['Gym_Fitness_Centre '] = df['Gym_Fitness_Centre '].astype(object)
+df['B2B_Payment'] = df['B2B_Payment'].astype(object)
+df['High_value_Transactions_Above_25k'] = df['High_value_Transactions_Above_25k'].astype(object)
+df['Shopping '] = df['Shopping '].astype(object)
+df['Investments '] = df['Investments '].astype(object)
+df['No_of_transactions'] = df['No_of_transactions'].astype(object)
+df['Month '] = df['Month '].astype(str)
 
-ValueError: could not convert string to float: Medium Value Customers
+df2 = df[['nam_branch', 'nam_cust_full', 'txt_profession_desc',
+       'nam_custadr_city', 'nam_custadr_state', 'txt_holdadr_add3',
+       'txt_cust_typ', 'risk_category', 'wealth_mng_cust', 'annual_inc_trnor',
+       'resi_type', 'nam_product', 'promotional_offers', 'Bill Payment',
+       'Dining ', 'Loan', 'Travel & hospitality ', 'Vehicle Running Expenses',
+       'Credit Card Payement ', 'Gym_Fitness_Centre ', 'B2B_Payment',
+       'High_value_Transactions_Above_25k', 'Shopping ', 'Investments ',
+       'No_of_transactions', 'Total Spent ', 'Month ', 'Customer_Value',
+       'Type_of Investor ', 'Profession', 'Frequency_of_Transactions',
+       'Type_of_Transactions']]
+
+def custom_tokenizer(text):
+    # split the text and value using regular expression
+    import re
+    pattern = re.compile(r'[a-zA-Z]+\d+')
+    text_and_value = pattern.findall(text)
+    return text_and_value
+
+# Apply TF-Vectorization on data
+tfidf_payer_name = TfidfVectorizer()
+tfidf_matrix_payer_name = tfidf_payer_name.fit_transform(df2['txt_profession_desc'].astype(str))
+
+tfidf_payee_name = TfidfVectorizer()
+tfidf_matrix_payee_name = tfidf_payee_name.fit_transform(df2['nam_custadr_city'].astype(str))
+
+tfidf_payee_account_type = TfidfVectorizer()
+tfidf_matrix_payee_account_type = tfidf_payee_account_type.fit_transform(df2['nam_custadr_state'].astype(str))
+
+tfidf_payer_account_type = TfidfVectorizer()
+tfidf_matrix_payer_account_type = tfidf_payer_account_type.fit_transform(df2['txt_cust_typ'].astype(str))
+
+tfidf_matrix = pd.concat([pd.DataFrame(tfidf_matrix_payer_name.toarray()),
+                          pd.DataFrame(tfidf_matrix_payee_name.toarray()),
+                          pd.DataFrame(tfidf_matrix_payee_account_type.toarray()),
+                          pd.DataFrame(tfidf_matrix_payer_account_type.toarray())], axis=1)
+
+X_train, X_test, y_train, y_test = train_test_split(tfidf_matrix, 
+                                                    df2[['Customer_Value', 'Frequency_of_Transactions', 'Type_of_Transactions', 'Profession','Type_of Investor ']], 
+                                                    test_size=0.2, random_state=42)
+
+# Train a separate RandomForestClassifier for each category
+clfs = {}
+predictions = {}
+for col in y_train.columns:
+    clfs[col] = RandomForestClassifier()
+    clfs[col].fit(X_train, y_train[col])
+    predictions[col] = clfs[col].predict(X_test)
+
+# Calculate accuracy for each category
+for col in y_test.columns:
+    accuracy = accuracy_score(y_test[col], predictions[col])
+    print "Accuracy for %s: %.2f" % (col, accuracy)
+
+print df2.head(2)
 
 
+
+-------------------------------
 
 AutoAI Experiment
 Connections
