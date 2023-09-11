@@ -17,6 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
+from IPython.display import display
 
 df = pd.read_excel("Cust_segmentation_and_Recomendation_with_Recommendations.xlsx")  # Replace with the path to your dataset
 
@@ -86,6 +87,12 @@ for col in y_train.columns:
 
 # Combine predictions into a single DataFrame
 predictions_df = pd.DataFrame(predictions)
+
+# Display the first few rows of the predictions DataFrame in tabular format:
+display(predictions_df.head())
+
+# Display the first few rows of df2 in tabular format:
+display(df2.head(2))
 
 # If you want to view the first few rows of the predictions DataFrame:
 print predictions_df.head()
