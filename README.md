@@ -6,6 +6,14 @@ IBM Watson Discovery - https://www.youtube.com/watch?v=py8QwrIUynE&list=PLgNJO2h
 Watson Assistant - https://www.youtube.com/watch?v=CeId265HGnM&list=PLgNJO2hghbmiACV9v_sdBwRLnEdKUlZ1s
 Watson Personality Inwsights - https://www.youtube.com/watch?v=3xukwXLDbbE&list=PLgNJO2hghbmj4N9wL2BC0YLjz1V7fmoao
 DWBIADDA VIDEOS-https://www.youtube.com/watch?v=fPu8MRV-RBI&list=PL3GCZkoyKK4ewLKHuxb8gJNH1h30IHiic
+
+-------
+# Combine predictions into a single DataFrame
+predictions_df = pd.DataFrame(predictions)
+
+# If you want to view the first few rows of the predictions DataFrame:
+print predictions_df.head()
+
 --------------
 # Phonepe ML Model 
 # Importing Libraries
